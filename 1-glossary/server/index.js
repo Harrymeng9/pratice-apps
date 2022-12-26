@@ -1,9 +1,7 @@
 require("dotenv").config();
-
 const express = require("express");
 const path = require("path");
 const db = require('./db');
-
 const app = express();
 const port = 4000;
 
@@ -11,7 +9,8 @@ app.use(express.json());
 //Serving static files in Express
 app.use(express.static(path.join(__dirname, '../client/dist/')));
 
-
+// POST rquest, create a new term and definition
+// If the term already exists in database, then send 'false' to client
 app.post("/glossary", function (req, res) {
 
   db.checkExist(req.body.term)
@@ -30,6 +29,7 @@ app.post("/glossary", function (req, res) {
       };
     });
 });
+
 // GET request, Search Record
 app.get("/glossarySearch", function (req, res) {
   db.searchRecord(req.query.term)
@@ -56,7 +56,7 @@ app.get("/glossaryFilter", function (req, res) {
 app.post("/glossaryUpdate", function (req, res) {
   db.updateRecord(req.body.term, req.body.definition)
     .then((data) => {
-      res.status(200).send('Update successfully!');
+      res.status(201).send('Update successfully!');
     })
     .catch((err) => {
       res.status(500).send('Update failed!');
@@ -67,22 +67,22 @@ app.post("/glossaryUpdate", function (req, res) {
 app.post("/glossaryDelete", function (req, res) {
   db.deleteRecord(req.body.term)
     .then((data) => {
-      res.status(200).send('Delete successfully!');
+      res.status(201).send('Delete successfully!');
     })
     .catch((err) => {
       res.status(500).send('Delete failed!');
     })
 });
 
-// GET request
+// GET request, get all data
 app.get("/glossary", function (req, res) {
   // Get data from database
   db.get()
     .then((data) => {
-      res.status(201).send(data);
+      res.status(200).send(data);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      res.status(500).send(err);
     })
 });
 

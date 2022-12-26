@@ -10,7 +10,6 @@ const Create = (props) => {
 
   function clickCreate(e) {
     if (term.length > 0 && definition.length > 0) {
-
       // if term exists, then ask client to enter a new one
       axios.post('/glossary', {
         term: term,

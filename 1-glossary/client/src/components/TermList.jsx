@@ -1,6 +1,6 @@
 import react from 'react';
 import ReactDOM from 'react-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 const axios = require('axios');
 
 const TermList = (props) => {
@@ -8,6 +8,28 @@ const TermList = (props) => {
   const [update, setUpdate] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [filterInput, setFilterInput] = useState('');
+
+  // Trigger it once only filterInput changed
+  useEffect(() => {
+    if (filterInput === 'Select a Filter') {
+      axios.get('/glossary')
+        .then((result) => {
+          props.setAllTerms(result.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    } else {
+      axios.get('/glossaryFilter', { params: { firstLetter: filterInput } })
+        .then((result) => {
+          props.setAllTerms(result.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [filterInput]);
+
 
   // Search Function
   function searchRecord(searchInput) {
@@ -77,41 +99,6 @@ const TermList = (props) => {
       })
   };
 
-  function triggerFilter(e) {
-    // setFilterInput(e.target.value);
-
-    axios.get('/glossaryFilter', { params: { firstLetter: filterInput } })
-      .then((result) => {
-        props.setAllTerms(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-
-  }
-  // Filter Function
-  // if (filterInput === '---') {
-  //   axios.get('/glossary')
-  //     .then((result) => {
-  //       props.setAllTerms(result.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // } else {
-  //   axios.get('/glossaryFilter', { params: { firstLetter: filterInput } })
-  //     .then((result) => {
-  //       props.setAllTerms(result.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // }
-
-
-
-
-
   const firstLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
   return (
@@ -124,7 +111,7 @@ const TermList = (props) => {
         <label>
           Filter by Term First Letter:
           <select value={filterInput} onChange={(e) => setFilterInput(e.target.value)}>
-          {/* <select value={filterInput} onChange={triggerFilter}> */}
+            {/* <select value={filterInput} onChange={triggerFilter}> */}
             <option>Select a Filter</option>
             {firstLetters.map((firstLetter, i) => (
               <option key={i}>{firstLetter}</option>

@@ -25,12 +25,14 @@ var checkExist = (termInput) => {
   return Glossary.count({ 'term': termInput });
 };
 
+// Search the data which include termInput
 var searchRecord = (termInput) => {
   return Glossary.find({term: {$regex: termInput, $options: 'i'}});
 };
 
+// Begin with firstLetter, works for lower and upper case
 var filterRecord = (firstLetter) => {
-  return Glossary.find({term: {$regex : '^' + firstLetter}});
+  return Glossary.find({term: {$regex : '^' + firstLetter, $options: 'i'}});
 };
 
 var updateRecord = (termInput, definitionInput) => {
