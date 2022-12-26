@@ -6,12 +6,24 @@ const axios = require('axios');
 const TermList = (props) => {
 
   const [update, setUpdate] = useState('');
+  const [searchInput, setSearchInput] = useState('');
 
+  // Search Function
+  function searchRecord(searchInput) {
+    axios.get('/glossarySearch', { params: { term: searchInput } })
+      .then((result) => {
+        props.setAllTerms(result.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  // Edit Function
   // If buttonText is 'Edit', once click it, it will be 'Update' and vice versa
   function editRecord(term, i) {
     var defId = 'definition' + i;
     var buttonID = 'Edit' + i;
-
     // Change buttonText from 'Edit' to 'Update' once click and vice versa
     var buttonText = document.getElementById(buttonID);
     if (buttonText.innerHTML === 'Edit') {
@@ -48,6 +60,7 @@ const TermList = (props) => {
     }
   };
 
+  // Delete Function
   function deleteRecord(term) {
     axios.post('/glossaryDelete', {
       term: term
@@ -66,8 +79,8 @@ const TermList = (props) => {
   return (
     <div>
       <div>
-        <input type='search' />
-        <button>Search</button>
+        <input type='search' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+        <button onClick={(e) => searchRecord(searchInput)}>Search</button>
       </div>
       <table>
         <tr>

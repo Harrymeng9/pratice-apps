@@ -22,37 +22,48 @@ app.post("/glossary", function (req, res) {
         // Save data into database
         db.save(req.body)
           .then((result) => {
-            res.status(201).send('Save successfully!')
+            res.status(201).send('Save successfully!');
           })
           .catch((err) => {
-            res.status(500).send('Save failed!')
+            res.status(500).send('Save failed!');
           })
       };
     });
 });
+// GET request, Search Record
+app.get("/glossarySearch", function (req, res) {
+  db.searchRecord(req.query.term)
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send('Search failed!');
+    })
+});
 
+// POST request, Update Record
 app.post("/glossaryUpdate", function (req, res) {
   db.updateRecord(req.body.term, req.body.definition)
     .then((data) => {
-      res.status(200).send('Update successfully!')
+      res.status(200).send('Update successfully!');
     })
     .catch((err) => {
-      res.status(500).send('Update failed!')
+      res.status(500).send('Update failed!');
     })
 });
 
-
+// POST request, Delete Record
 app.post("/glossaryDelete", function (req, res) {
   db.deleteRecord(req.body.term)
     .then((data) => {
-      res.status(200).send('Delete successfully!')
+      res.status(200).send('Delete successfully!');
     })
     .catch((err) => {
-      res.status(500).send('Delete failed!')
+      res.status(500).send('Delete failed!');
     })
 });
 
-
+// GET request
 app.get("/glossary", function (req, res) {
   // Get data from database
   db.get()
