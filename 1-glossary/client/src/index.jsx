@@ -19,7 +19,7 @@ const Root = (props) => {
 
   return (
     <div>
-      <h1>Hello World HeyHey</h1>
+      <h1>Glossary</h1>
       <div>
         <Create setAllTerms={setAllTerms} />
       </div>

@@ -26,9 +26,11 @@ var checkExist = (termInput) => {
 };
 
 var searchRecord = (termInput) => {
-
-  // return Glossary.find();
   return Glossary.find({term: {$regex: termInput, $options: 'i'}});
+};
+
+var filterRecord = (firstLetter) => {
+  return Glossary.find({term: {$regex : '^' + firstLetter}});
 };
 
 var updateRecord = (termInput, definitionInput) => {
@@ -43,6 +45,7 @@ module.exports.save = save;
 module.exports.get = get;
 module.exports.checkExist = checkExist;
 module.exports.searchRecord = searchRecord;
+module.exports.filterRecord = filterRecord;
 module.exports.updateRecord = updateRecord;
 module.exports.deleteRecord = deleteRecord;
 // 4. Import the models into any modules that need them

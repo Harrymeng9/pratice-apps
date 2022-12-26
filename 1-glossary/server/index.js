@@ -41,6 +41,17 @@ app.get("/glossarySearch", function (req, res) {
     })
 });
 
+// GET request, Filter Record
+app.get("/glossaryFilter", function (req, res) {
+  db.filterRecord(req.query.firstLetter)
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send('Filter failed!');
+    })
+});
+
 // POST request, Update Record
 app.post("/glossaryUpdate", function (req, res) {
   db.updateRecord(req.body.term, req.body.definition)
