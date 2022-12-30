@@ -1,9 +1,23 @@
 import { useState } from 'react';
+const axios = require('axios');
 
 const Confirmation = (props) => {
 
   function navigateToHome(e) {
     props.setPage('Home');
+    axios.post('/checkout', {
+      name: props.name, email: props.email, password: props.password, addressLine1: props.addressLine1,
+      addressLine2: props.addressLine2, city: props.city, state: props.state, zipCode: props.zipCode, phoneNumber: props.phoneNumber,
+      cardNumber: props.cardNumber, expiryDate: props.expiryDate, cvv: props.cvv, billingZipCode: props.billingZipCode
+    })
+      .then((result) => {
+        //
+        console.log('result', result);
+
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   };
 
   return (
@@ -20,14 +34,14 @@ const Confirmation = (props) => {
       <div>City: {props.city}</div>
       <div>State: {props.state}</div>
       <div>Zip Code: {props.zipCode}</div>
-      <div>Phone#: {props.phoneNumber}</div>
+      <div>Phone Number: {props.phoneNumber}</div>
       <br></br>
 
       <h3>Credit Card</h3>
       <div>Credit Card#: {props.cardNumber}</div>
       <div>Expiry Date: {props.expiryDate}</div>
       <div>CVV: {props.cvv}</div>
-      <div>Billing Zip Code: {props.billingZip}</div>
+      <div>Billing Zip Code: {props.billingZipCode}</div>
       <br></br>
 
       <button onClick={navigateToHome}>Purchase</button>

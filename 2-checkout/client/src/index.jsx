@@ -22,7 +22,7 @@ const Root = (props) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
-  const [billingZip, setBillingZip] = useState('');
+  const [billingZipCode, setBillingZipCode] = useState('');
 
   function navigateToF1(e) {
     setPage('Name');
@@ -57,7 +57,7 @@ const Root = (props) => {
     return (
       <div>
         <h1>Step 4</h1>
-        <Card setPage={setPage} setCardNumber={setCardNumber} setExpiryDate={setExpiryDate} setCvv={setCvv} setBillingZip={setBillingZip} />
+        <Card setPage={setPage} setCardNumber={setCardNumber} setExpiryDate={setExpiryDate} setCvv={setCvv} setBillingZipCode={setBillingZipCode} />
       </div>
     )
   } else if (page === 'Confirmation') {
@@ -66,7 +66,7 @@ const Root = (props) => {
         <h1>Step 5</h1>
         <Confirmation setPage={setPage} name={name} email={email} password={password} addressLine1={addressLine1}
           addressLine2={addressLine2} city={city} state={state} zipCode={zipCode} phoneNumber={phoneNumber}
-          cardNumber={cardNumber} expiryDate={expiryDate} cvv={cvv} billingZip={billingZip} />
+          cardNumber={cardNumber} expiryDate={expiryDate} cvv={cvv} billingZipCode={billingZipCode} />
       </div>
     )
   }
