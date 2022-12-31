@@ -6,6 +6,7 @@ import Name from './components/Name.jsx';
 import Address from './components/Address.jsx';
 import Card from './components/Card.jsx';
 import Confirmation from './components/Confirmation.jsx';
+const axios = require('axios');
 
 const Root = (props) => {
 
@@ -25,12 +26,25 @@ const Root = (props) => {
   const [billingZipCode, setBillingZipCode] = useState('');
 
   function navigateToF1(e) {
-    setPage('Name');
+    // Since a user can only submit the form once per session, need check whether he already checked out or now
+    // document.cookie = "s_id=1001e5ea-4d55-41ab-8de2-3e3ca1f7abcd"
+    // document.cookie.slice(5) = 1001e5ea-4d55-41ab-8de2-3e3ca1f7abcd
+    axios.get('/checkout', { params: { sessionID: document.cookie.slice(5)} })
+      .then((result) => {
+        // If the sessionId exists in database, which means customer already checked out
+        if (result.data) {
+          alert('You already checked out!');
+        } else {
+          // Else move on to the next check out page
+          setPage('Name');
+        }
+      })
   };
 
   if (page === 'Home') {
     return (
       <div>
+        <h1>Check Out</h1>
         <h1>Step 1</h1>
         <p>
           <code>Page Cookie: {JSON.stringify(document.cookie, undefined, "\t")}</code>
@@ -73,24 +87,3 @@ const Root = (props) => {
 }
 
 ReactDOM.render(<Root />, document.getElementById('root'));
-
-// render(
-//   <div>
-//     <p>Hello, World!</p>
-//     <p>
-//       <code>Page Cookie: {JSON.stringify(document.cookie, undefined, "\t")}</code>
-//     </p>
-//   </div>,
-//   document.getElementById("root")
-// );
-
-
-// return (
-//   <div>
-//   <p>Hello, World!</p>
-//   <p>
-//     <code>Page Cookie: {JSON.stringify(document.cookie, undefined, "\t")}</code>
-//   </p>
-//   <button onClick = {navigateToF1}>Check Out</button>
-// </div>
-// )

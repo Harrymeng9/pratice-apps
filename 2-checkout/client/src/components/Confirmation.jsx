@@ -8,12 +8,11 @@ const Confirmation = (props) => {
     axios.post('/checkout', {
       name: props.name, email: props.email, password: props.password, addressLine1: props.addressLine1,
       addressLine2: props.addressLine2, city: props.city, state: props.state, zipCode: props.zipCode, phoneNumber: props.phoneNumber,
-      cardNumber: props.cardNumber, expiryDate: props.expiryDate, cvv: props.cvv, billingZipCode: props.billingZipCode
+      cardNumber: props.cardNumber, expiryDate: props.expiryDate, cvv: props.cvv, billingZipCode: props.billingZipCode, sessionID: document.cookie
     })
       .then((result) => {
-        //
-        console.log('result', result);
-
+        // Should display "Processed Successfully!"
+        console.log(result.data);
       })
       .catch((err) => {
         console.log(err);

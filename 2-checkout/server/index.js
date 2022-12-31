@@ -33,14 +33,35 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
  *
  *
  */
+
+app.get('/checkout', function (req, res) {
+  // FYI page cookie: "s_id=1001e5ea-4d55-41ab-8de2-3e3ca1f7abcd"
+  // But below req.session_id is : 1001e5ea-4d55-41ab-8de2-3e3ca1f7abcd
+  var cookie = req.session_id;
+  var query = `SELECT * FROM responses WHERE sessionID = '${cookie}'`;
+  db.query(query, function (err, result) {
+    if (err) {
+      res.status(500);
+    }
+    // If cannot find any sessionID in database, that means customer hasn't checked out yet
+    // Then send back 'False' to client
+    if (!result || result.length === 0) {
+      res.status(201).send(false);
+    } else {
+      res.status(201).send(true);
+    }
+  })
+});
+
 app.post('/checkout', function (req, res) {
-  console.log('body.id', req.body);
   var query = `INSERT INTO responses (name, email, password, address_line_1, address_line_2, city, state, zipcode, phone_number,
-    card_number, expiry_date, cvv, billing_zipcode) VALUES ('${req.body.name}','${req.body.email}','${req.body.password}','${req.body.addressLine1}',
+    card_number, expiry_date, cvv, billing_zipcode, sessionID) VALUES ('${req.body.name}','${req.body.email}','${req.body.password}','${req.body.addressLine1}',
   '${req.body.addressLine2}','${req.body.city}','${req.body.state}','${req.body.zipCode}','${req.body.phoneNumber}','${req.body.cardNumber}',
-  '${req.body.expiryDate}','${req.body.cvv}','${req.body.billingZipCode}')`;
-  db.query(query, function(err, result) {
-    if (err) {throw err;}
+  '${req.body.expiryDate}','${req.body.cvv}','${req.body.billingZipCode}', '${req.session_id}')`;
+  db.query(query, function (err, result) {
+    if (err) {
+      res.status(500);
+    }
     console.log('result', result);
   })
   res.status(200).send('Processed successfully!');
